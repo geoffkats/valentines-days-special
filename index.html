@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Valentine's Day Card</title>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <style>
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-color: #fae1dd;
+      cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="%23d62828"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>') 16 16, auto !important;
+    }
+
+    /* Force heart cursor on everything */
+    a,
+    button,
+    .valentines,
+    .card,
+    .container {
+      cursor: inherit !important;
+    }
+
+    /* .sparkle {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      background-color: gold;
+      border-radius: 50%;
+      pointer-events: none;
+      animation: fadeOut 1s linear forwards;
+      z-index: 9999;
+      box-shadow: 0 0 5px gold;
+    } */
+
+    @keyframes fadeOut {
+      0% {
+        transform: scale(1);
+        opacity: 1;
+      }
+
+      100% {
+        transform: scale(0);
+        opacity: 0;
+      }
+    }
+
+    .container {
+      position: relative;
+    }
+
+    .valentines {
+      position: relative;
+      top: 50px;
+      /* cursor: pointer; */
+      animation: up 3s linear infinite;
+    }
+
+    @keyframes up {
+
+      0%,
+      100% {
+        transform: translateY(0);
+      }
+
+      50% {
+        transform: translateY(-30px);
+      }
+    }
+
+    .envelope {
+      position: relative;
+      width: 300px;
+      height: 200px;
+      background-color: #f08080;
+    }
+
+    .envelope:before {
+      background-color: #f08080;
+      content: "";
+      position: absolute;
+      width: 212px;
+      height: 212px;
+      transform: rotate(45deg);
+      top: -105px;
+      left: 44px;
+      border-radius: 30px 0 0 0;
+    }
+
+    .card {
+      position: absolute;
+      background: linear-gradient(#fffaf0, #fdf1e7);
+      width: 270px;
+      height: 170px;
+      top: 5px;
+      left: 15px;
+      box-shadow: -5px -5px 15px rgba(0, 0, 0, 0.1);
+      border-radius: 12px;
+      transition: top 0.8s ease;
+      z-index: 5;
+    }
+
+    .card.open {
+      top: -90px;
+    }
+
+    .card:before {
+      content: "";
+      position: absolute;
+      border: 2px solid #003049;
+      border-style: dotted;
+      width: 240px;
+      height: 140px;
+      left: 12px;
+      top: 12px;
+      border-radius: 8px;
+    }
+
+    .text {
+      position: absolute;
+      font-family: 'Brush Script MT', cursive;
+      font-size: 24px;
+      text-align: center;
+      line-height: 25px;
+      top: 19px;
+      left: 5px;
+      width: 260px;
+      color: #003049;
+    }
+
+    .inside-text {
+      opacity: 0;
+      transition: opacity 1s;
+      font-size: 20px;
+      top: 40px;
+    }
+
+    .front-text {
+      opacity: 1;
+      transition: opacity 1s;
+    }
+
+    .card.open .inside-text {
+      opacity: 1;
+    }
+
+    .card.open .front-text {
+      opacity: 0;
+    }
+
+
+
+    .footer {
+      position: fixed;
+      bottom: 10px;
+      width: 100%;
+      text-align: center;
+      font-family: monospace;
+      color: #d62828;
+      pointer-events: none;
+    }
+
+    .heart {
+      background-color: #d62828;
+      display: inline-block;
+      height: 30px;
+      margin: 0 10px;
+      position: relative;
+      top: 110px;
+      left: 105px;
+      transform: rotate(-45deg);
+      width: 30px;
+    }
+
+    .heart:before,
+    .heart:after {
+      content: "";
+      background-color: #d62828;
+      border-radius: 50%;
+      height: 30px;
+      position: absolute;
+      width: 30px;
+    }
+
+    .heart:before {
+      top: -15px;
+      left: 0;
+    }
+
+    .heart:after {
+      left: 15px;
+      top: 0;
+    }
+
+    .hearts {
+      position: absolute;
+    }
+
+    .one,
+    .two,
+    .three,
+    .four,
+    .five {
+      background-color: red;
+      display: inline-block;
+      height: 10px;
+      margin: 0 10px;
+      position: relative;
+      transform: rotate(-45deg);
+      width: 10px;
+      top: 50px;
+    }
+
+    .one:before,
+    .one:after,
+    .two:before,
+    .two:after,
+    .three:before,
+    .three:after,
+    .four:before,
+    .four:after,
+    .five:before,
+    .five:after {
+      content: "";
+      background-color: red;
+      border-radius: 50%;
+      height: 10px;
+      position: absolute;
+      width: 10px;
+    }
+
+    .one:before,
+    .two:before,
+    .three:before,
+    .four:before,
+    .five:before {
+      top: -5px;
+      left: 0;
+    }
+
+    .one:after,
+    .two:after,
+    .three:after,
+    .four:after,
+    .five:after {
+      left: 5px;
+      top: 0;
+    }
+
+    .one {
+      left: 10px;
+      animation: heart 1s ease-out infinite;
+    }
+
+    .two {
+      left: 30px;
+      animation: heart 2s ease-out infinite;
+    }
+
+    .three {
+      left: 50px;
+      animation: heart 1.5s ease-out infinite;
+    }
+
+    .four {
+      left: 70px;
+      animation: heart 2.3s ease-out infinite;
+    }
+
+    .five {
+      left: 90px;
+      animation: heart 1.7s ease-out infinite;
+    }
+
+    @keyframes heart {
+      0% {
+        transform: translateY(0) rotate(-45deg) scale(0.3);
+        opacity: 1;
+      }
+
+      100% {
+        transform: translateY(-150px) rotate(-45deg) scale(1.3);
+        opacity: 0.5;
+      }
+    }
+
+    .front {
+      position: absolute;
+      border-right: 180px solid #f4978e;
+      border-top: 95px solid transparent;
+      border-bottom: 100px solid transparent;
+      left: 120px;
+      top: 5px;
+      width: 0;
+      height: 0;
+      z-index: 10;
+    }
+
+    .front:before {
+      position: absolute;
+      content: "";
+      border-left: 300px solid #f8ad9d;
+      border-top: 195px solid transparent;
+      left: -120px;
+      top: -95px;
+      width: 0;
+      height: 0;
+    }
+
+    .shadow {
+      position: absolute;
+      width: 330px;
+      height: 25px;
+      border-radius: 50%;
+      background-color: rgba(0, 0, 0, 0.3);
+      top: 265px;
+      left: -15px;
+      animation: scale 3s linear infinite;
+      z-index: -1;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div class="valentines">
+      <div class="envelope"></div>
+      <div class="front"></div>
+      <div class="card">
+        <div class="text front-text">For You,<br><strong>Sarah</strong><br>❤️</div>
+        <div class="text inside-text">I’m really glad I met you ❤️</div>
+        <div class="heart"></div>
+        <div class="hearts">
+          <div class="one"></div>
+          <div class="two"></div>
+          <div class="three"></div>
+          <div class="four"></div>
+          <div class="five"></div>
+        </div>
+      </div>
+    </div>
+    <div class="shadow"></div>
+  </div>
+  <div class="footer"><small>Made just for you 💝</small></div>
+
+  <script>
+    $(document).ready(function () {
+      $('.valentines').click(function () {
+        $('.card').toggleClass('open');
+      });
+
+      $(document).mousemove(function (e) {
+        var sparkle = $('<div class="sparkle"></div>');
+        $('body').append(sparkle);
+        sparkle.css({
+          left: e.pageX,
+          top: e.pageY
+        });
+        setTimeout(function () {
+          sparkle.remove();
+        }, 1000);
+      });
+
+
+    });
+  </script>
+</body>
+
+</html>
